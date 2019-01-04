@@ -1,4 +1,11 @@
 const puppeteer = require('puppeteer');
+let nespressoData = Promise.resolve();
+const express = require('express');
+const app = express();
+
+app.get("/", async function(req, res) {
+    res.status(200).json(await nespressoData);
+  });
 
 fetchPods = async () => {
     const browser = await puppeteer.launch({ headless: true });
@@ -25,7 +32,9 @@ fetchPods = async () => {
         return pods
     });
     await browser.close();
-    console.log(data);
+    return data;
 };
-fetchPods();
-setInterval(fetchPods, 60 * 1000);
+nespressoData = fetchPods();
+setInterval(() => {nespressoData = fetchPods()}, 60 * 1000);
+
+app.listen(8000, () => {console.log('app listening on port 8000')});
