@@ -1,6 +1,5 @@
 const mongo = require("mongodb");
 const puppeteer = require('puppeteer');
-let nespressoData = Promise.resolve();
 const express = require('express');
 const app = express();
 const MongoClient = mongo.MongoClient;
@@ -26,7 +25,7 @@ const url = "mongodb://localhost:27017/";
         const data = await page.evaluate(() => {
             let rows = document.getElementsByClassName('ProductListElement');
 
-            getText = (className, row) => {
+            let getText = (className, row) => {
                 return row.querySelector(className).textContent;
             }
 
@@ -48,7 +47,7 @@ const url = "mongodb://localhost:27017/";
 
 
     let fetchAndStore = async () => {
-        nespressoData = await fetchPods();
+        let nespressoData = await fetchPods();
         let nespressoCurrent = db.collection("current");
         let nespressoHistory = db.collection("historical");
         for (let pod of nespressoData) {
